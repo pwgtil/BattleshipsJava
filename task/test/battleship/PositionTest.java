@@ -49,15 +49,15 @@ public class PositionTest extends TestCase {
     }
 
     public void testPositionInBounds() {
-        assertTrue(Position.positionInBounds(new Position(0, 0)));
-        assertTrue(Position.positionInBounds(new Position(0, 4)));
-        assertTrue(Position.positionInBounds(new Position(3, 0)));
-        assertTrue(Position.positionInBounds(new Position(2, 9)));
-        assertTrue(Position.positionInBounds(new Position(9, 0)));
+        assertTrue(new Position(0, 0).positionInBounds());
+        assertTrue(new Position(0, 4).positionInBounds());
+        assertTrue(new Position(3, 0).positionInBounds());
+        assertTrue(new Position(2, 9).positionInBounds());
+        assertTrue(new Position(9, 0).positionInBounds());
 
-        assertFalse(Position.positionInBounds(new Position(10,10)));
-        assertFalse(Position.positionInBounds(new Position(-1,0)));
-        assertFalse(Position.positionInBounds(new Position(11,1)));
-        assertFalse(Position.positionInBounds(new Position(1,600)));
+        assertFalse(new Position(10,10).positionInBounds());
+        assertFalse(new Position(-1,0).positionInBounds());
+        assertFalse(new Position(11,1).positionInBounds());
+        assertFalse(new Position(1,600).positionInBounds());
     }
 }

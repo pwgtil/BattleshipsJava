@@ -57,6 +57,15 @@ public class Position {
         }
     }
 
+    public boolean positionInBounds() {
+        ValueRange range = ValueRange.of(0, Board.boardSize - 1);
+        if (range.isValidIntValue(this.col) && range.isValidIntValue(this.row)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     //--STATICS---------------------------------------------------------------------------------------------------------
     //--Core parsers between internal state and display state of positions (A -> 1 etc.)--------------------------------
     //------------------------------------------------------------------------------------------------------------------
@@ -90,18 +99,6 @@ public class Position {
             return Board.rowInt2Str.get(number);
         } else {
             throw new IllegalArgumentException(String.format("Error. Expected a number between 0 and %d.", Board.boardSize - 1));
-        }
-    }
-
-    //--STATICS---------------------------------------------------------------------------------------------------------
-    //--Static checks section-------------------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------------------------------------------
-    static public boolean positionInBounds(Position position) {
-        ValueRange range = ValueRange.of(0, Board.boardSize - 1);
-        if (range.isValidIntValue(position.col) && range.isValidIntValue(position.row)) {
-            return true;
-        } else {
-            return false;
         }
     }
 }
