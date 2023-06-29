@@ -33,7 +33,6 @@ abstract class Ship extends Area {
     @Override
     public void setLocation(Position[] positions) {
 
-        HashSet<Position> areaOfInfluence;
         int colMin, colMax, rowMin, rowMax;
         if (positions.length != 2){
             throw new IllegalArgumentException(MSG_ERR_WRONG_LOCATION);
@@ -48,7 +47,6 @@ abstract class Ship extends Area {
             if (beginning.col == end.col) {
                 colMin = colMax = beginning.col;
                 if (Math.abs(beginning.row - end.row) + 1 == noOfCells) {
-//                    locationOK = true;
                     rowMin = Math.min(beginning.row, end.row);
                     rowMax = Math.max(beginning.row, end.row);
                     // All ok let's set up our ship
@@ -60,7 +58,6 @@ abstract class Ship extends Area {
             } else if (beginning.row == end.row) {
                 rowMin = rowMax = beginning.row;
                 if (Math.abs(beginning.col - end.col) + 1 == noOfCells) {
-//                    locationOK = true;
                     colMin = Math.min(beginning.col, end.col);
                     colMax = Math.max(beginning.col, end.col);
                     // All ok let's set up our ship
