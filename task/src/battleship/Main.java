@@ -16,6 +16,7 @@ public class Main {
         player.giveShipLocation(new Destroyer());
         player.drawBoard();
         player.startGame();
+        player.fire();
 
     }
 }

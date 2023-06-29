@@ -3,9 +3,11 @@ Player:
     - board: Board
   methods:
     - Player()
-    - giveShipLocation()
-    - drawBoard()
-    - shoot() : TODO
+    - void giveShipLocation(Ship ship)
+    - void drawBoard()
+    - void startGame()
+    - void fire()
+    - Position getPositionFromText(String text)
     - win(): TODO
 
 Position:
@@ -24,24 +26,28 @@ Board:
     - areaOfInfluence: HashSet<Position>
   methods:
     - String getBoardForDisplay()
+    - boolean hitOrMiss(Shelling shelling)
     - void processShipPlacement(Ship ship, Position beginning, Position end)
     - void checkAreaOfInfluence(Ship ship)
+    - void processShelling(Position coordinates)
 
 
 Area (Abstract):
   params:
     - positions: ArrayList<Positions>
   methods:
-    - HashSet<Position> setLocation(Position beginning, Position end)
+    - void setLocation(Position[] positions): definition
 
 Ship (Abstract) extends Area:
   params:
     - noOfCells: int
     - name: String
     - hitPoints: int
+    - areaOfInfluence: HashSet<Positions>
   methods:
     - HashSet<Position> fillAreaOfInfluence(ArrayList<Position> positions)
     - ArrayList<Position> fillShipLocation(int rowMin, int rowMax, int colMin, int colMax)
+    - void setLocation(Position[] positions): implementation
 
 Carrier extends Ship:
   methods:
@@ -65,4 +71,4 @@ Destroyer extends Ship:
 
 Shelling extends Area:
   methods:
-    - setLocation() : TODO
+    - void setLocation(Position[] positions): implementation

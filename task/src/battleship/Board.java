@@ -58,31 +58,37 @@ public class Board {
     Board() {
         areas = new ArrayList<>();
         areaOfInfluence = new HashSet<>();
-
     }
 
     public String getBoardForDisplay() {
-        
+
         char[][] display = new char[Board.boardSize][Board.boardSize];
         Arrays.stream(display).forEach(row -> Arrays.fill(row, ICON_FOG));
-        
-        for (Area area: areas) {
-            if(area instanceof Ship){
-                for(Position pos : area.positions){
-                    if(display[pos.row][pos.col] == ICON_MISS){
+
+        for (Area area : areas) {
+            if (area instanceof Shelling) {
+                for (Position pos : area.positions) {
+                    if (display[pos.row][pos.col] == ICON_SHIP) {
+                        display[pos.row][pos.col] = ICON_HIT;
+                    } else {
+                        display[pos.row][pos.col] = ICON_MISS;
+                    }
+                }
+            }
+            if (area instanceof Ship) {
+                for (Position pos : area.positions) {
+                    if (display[pos.row][pos.col] == ICON_MISS) {
                         display[pos.row][pos.col] = ICON_HIT;
                     } else {
                         display[pos.row][pos.col] = ICON_SHIP;
                     }
                 }
-            } 
-            if (area instanceof Shelling) {
-                // TODO: 2023-06-29 fill when stage with shoots 
             }
+
         }
         StringBuilder output = new StringBuilder();
         output.append(" ");
-        for(String s: colStr2Int.keySet()){
+        for (String s : colStr2Int.keySet()) {
             output.append(" ").append(s);
         }
         output.append("\n");
@@ -97,19 +103,39 @@ public class Board {
     }
 
     public void processShipPlacement(Ship ship, Position beginning, Position end) {
-        HashSet<Position> areaOfInfluence = ship.setLocation(beginning, end);
+        ship.setLocation(new Position[]{beginning, end});
         checkAreaOfInfluence(ship);
         areas.add(ship);
-        this.areaOfInfluence.addAll(areaOfInfluence);
+        this.areaOfInfluence.addAll(ship.areaOfInfluence);
     }
 
     private void checkAreaOfInfluence(Ship ship) {
-        for (Position position: areaOfInfluence) {
+        for (Position position : areaOfInfluence) {
             if (ship.getPositions().contains(position)) {
                 throw new IllegalArgumentException(MSG_ERR_TOO_CLOSE);
             }
         }
     }
 
+    public void processShelling(Position coordinates) {
+        Shelling shelling = new Shelling();
+        shelling.setLocation(new Position[]{coordinates});
+        // TODO: 2023-06-29 add check if already shelled
+        areas.add(shelling);
+    }
 
+    private boolean hitOrMiss(Area shelling) {
+        for (Area area : areas) {
+            if (area instanceof Ship && area.positions.contains(shelling.positions.get(0))) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+
+    public boolean lastShotResult() {
+        return hitOrMiss(areas.get(areas.size() - 1));
+    }
 }

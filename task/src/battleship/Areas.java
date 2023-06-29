@@ -10,9 +10,7 @@ abstract class Area {
 
     protected ArrayList<Position> positions = new ArrayList<>();
 
-    public HashSet<Position> setLocation(Position beginning, Position end) {
-        return new HashSet<>();
-    }
+    public void setLocation(Position[] positions) {}
 }
 
 abstract class Ship extends Area {
@@ -23,19 +21,25 @@ abstract class Ship extends Area {
     final public int noOfCells;
     final public String name;
     protected int hitPoints;
-
+    HashSet<Position> areaOfInfluence;
 
 
     Ship(int noOfCells, String name) {
         this.hitPoints = this.noOfCells = noOfCells;
         this.name = name;
+        this.areaOfInfluence = new HashSet<>();
     }
 
     @Override
-    public HashSet<Position> setLocation(Position beginning, Position end) {
+    public void setLocation(Position[] positions) {
 
         HashSet<Position> areaOfInfluence;
         int colMin, colMax, rowMin, rowMax;
+        if (positions.length != 2){
+            throw new IllegalArgumentException(MSG_ERR_WRONG_LOCATION);
+        }
+        Position beginning = positions[0];
+        Position end = positions[1];
 
         // Boundaries preliminary check
         if (beginning.positionInBounds() && end.positionInBounds()) {
@@ -49,7 +53,7 @@ abstract class Ship extends Area {
                     rowMax = Math.max(beginning.row, end.row);
                     // All ok let's set up our ship
                     this.positions = fillShipLocation(rowMin, rowMax, colMin, colMax);
-                    areaOfInfluence = fillAreaOfInfluence(this.positions);
+                    this.areaOfInfluence = fillAreaOfInfluence(this.positions);
                 } else {
                     throw new IllegalArgumentException(String.format(MSG_ERR_WRONG_LENGTH, name));
                 }
@@ -61,7 +65,7 @@ abstract class Ship extends Area {
                     colMax = Math.max(beginning.col, end.col);
                     // All ok let's set up our ship
                     this.positions = fillShipLocation(rowMin, rowMax, colMin, colMax);
-                    areaOfInfluence = fillAreaOfInfluence(this.positions);
+                    this.areaOfInfluence = fillAreaOfInfluence(this.positions);
                 } else {
                     throw new IllegalArgumentException(String.format(MSG_ERR_WRONG_LENGTH, name));
                 }
@@ -71,7 +75,7 @@ abstract class Ship extends Area {
         } else {
             throw new IllegalArgumentException(MSG_ERR_WRONG_LOCATION);
         }
-        return areaOfInfluence;
+
     }
 
     private HashSet<Position> fillAreaOfInfluence(ArrayList<Position> positions) {
@@ -103,10 +107,22 @@ abstract class Ship extends Area {
 
 class Shelling extends Area {
 
+    final static String MSG_ERR_WRONG_COORDINATES = "Error! You entered the wrong coordinates! Try again:";
+
     @Override
-    public HashSet<Position> setLocation(Position beginning, Position end) {
-        // TODO: 2023-06-29 complete method. next stage 
-        return new HashSet<>();
+    public void setLocation(Position[] coordinates) {
+
+        if (coordinates.length != 1){
+            throw new IllegalArgumentException(MSG_ERR_WRONG_COORDINATES);
+        }
+
+        // Boundaries check
+        if (coordinates[0].positionInBounds()) {
+            positions = new ArrayList<>();
+            positions.add(coordinates[0]);
+        } else {
+            throw new IllegalArgumentException(MSG_ERR_WRONG_COORDINATES);
+        }
     }
 }
 
