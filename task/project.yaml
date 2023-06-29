@@ -1,0 +1,68 @@
+Player:
+  params:
+    - board: Board
+  methods:
+    - Player()
+    - giveShipLocation()
+    - drawBoard()
+    - shoot() : TODO
+    - win(): TODO
+
+Position:
+  params:
+    - row
+    - col
+    - rowDisplay
+    - colDisplay
+  methods:
+    - boolean equals(Object o)
+    - boolean positionInBounds()
+
+Board:
+  params:
+    - areas: ArrayList<Area>
+    - areaOfInfluence: HashSet<Position>
+  methods:
+    - String getBoardForDisplay()
+    - void processShipPlacement(Ship ship, Position beginning, Position end)
+    - void checkAreaOfInfluence(Ship ship)
+
+
+Area (Abstract):
+  params:
+    - positions: ArrayList<Positions>
+  methods:
+    - HashSet<Position> setLocation(Position beginning, Position end)
+
+Ship (Abstract) extends Area:
+  params:
+    - noOfCells: int
+    - name: String
+    - hitPoints: int
+  methods:
+    - HashSet<Position> fillAreaOfInfluence(ArrayList<Position> positions)
+    - ArrayList<Position> fillShipLocation(int rowMin, int rowMax, int colMin, int colMax)
+
+Carrier extends Ship:
+  methods:
+    - Carrier()
+
+Battleship extends Ship:
+  methods:
+   - Battleship()
+
+Submarine extends Ship:
+  methods:
+    - Submarine()
+
+Cruiser extends Ship:
+  methods:
+    - Cruiser()
+
+Destroyer extends Ship:
+  methods:
+    - Destroyer()
+
+Shelling extends Area:
+  methods:
+    - setLocation() : TODO

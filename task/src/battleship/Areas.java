@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 abstract class Area {
-    ArrayList<Position> positions = new ArrayList<>();
+    public ArrayList<Position> getPositions() {
+        return positions;
+    }
+
+    protected ArrayList<Position> positions = new ArrayList<>();
 
     public HashSet<Position> setLocation(Position beginning, Position end) {
         return new HashSet<>();
@@ -12,9 +16,14 @@ abstract class Area {
 }
 
 abstract class Ship extends Area {
+
+    final static String MSG_ERR_WRONG_LOCATION = "Error! Wrong ship location! Try again:";
+    final static String MSG_ERR_WRONG_LENGTH = "Error! Wrong length of the %s! Try again:";
+
     final public int noOfCells;
     final public String name;
     protected int hitPoints;
+
 
 
     Ship(int noOfCells, String name) {
@@ -25,9 +34,7 @@ abstract class Ship extends Area {
     @Override
     public HashSet<Position> setLocation(Position beginning, Position end) {
 
-        HashSet<Position> areaOfInfluence = new HashSet<>();
-        boolean isVertical = false;
-        boolean isHorizontal = false;
+        HashSet<Position> areaOfInfluence;
         int colMin, colMax, rowMin, rowMax;
 
         // Boundaries preliminary check
@@ -35,7 +42,6 @@ abstract class Ship extends Area {
 
             // Vertical or Horizontal placement AND size check
             if (beginning.col == end.col) {
-                isVertical = true;
                 colMin = colMax = beginning.col;
                 if (Math.abs(beginning.row - end.row) + 1 == noOfCells) {
 //                    locationOK = true;
@@ -44,9 +50,10 @@ abstract class Ship extends Area {
                     // All ok let's set up our ship
                     this.positions = fillShipLocation(rowMin, rowMax, colMin, colMax);
                     areaOfInfluence = fillAreaOfInfluence(this.positions);
+                } else {
+                    throw new IllegalArgumentException(String.format(MSG_ERR_WRONG_LENGTH, name));
                 }
             } else if (beginning.row == end.row) {
-                isHorizontal = true;
                 rowMin = rowMax = beginning.row;
                 if (Math.abs(beginning.col - end.col) + 1 == noOfCells) {
 //                    locationOK = true;
@@ -55,8 +62,14 @@ abstract class Ship extends Area {
                     // All ok let's set up our ship
                     this.positions = fillShipLocation(rowMin, rowMax, colMin, colMax);
                     areaOfInfluence = fillAreaOfInfluence(this.positions);
+                } else {
+                    throw new IllegalArgumentException(String.format(MSG_ERR_WRONG_LENGTH, name));
                 }
+            } else {
+                throw new IllegalArgumentException(MSG_ERR_WRONG_LOCATION);
             }
+        } else {
+            throw new IllegalArgumentException(MSG_ERR_WRONG_LOCATION);
         }
         return areaOfInfluence;
     }
@@ -92,39 +105,40 @@ class Shelling extends Area {
 
     @Override
     public HashSet<Position> setLocation(Position beginning, Position end) {
+        // TODO: 2023-06-29 complete method. next stage 
         return new HashSet<>();
     }
 }
 
 class Carrier extends Ship {
     Carrier() {
-        super(5, "aircraft carrier");
+        super(5, "Aircraft Carrier");
     }
 }
 
 class Battleship extends Ship {
     public Battleship() {
-        super(4, "battleship");
+        super(4, "Battleship");
     }
 }
 
 class Submarine extends Ship {
 
     public Submarine() {
-        super(3, "submarine");
+        super(3, "Submarine");
     }
 }
 
 class Cruiser extends Ship {
 
     public Cruiser() {
-        super(3, "cruiser");
+        super(3, "Cruiser");
     }
 }
 
 class Destroyer extends Ship {
 
     public Destroyer() {
-        super(2, "destroyer");
+        super(2, "Destroyer");
     }
 }
