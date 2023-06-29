@@ -4,19 +4,20 @@ public class Main {
 
     public static void main(String[] args) {
         Player player = new Player();
-        player.drawBoard();
+        player.drawFullBoard();
         player.giveShipLocation(new Carrier());
-        player.drawBoard();
+        player.drawFullBoard();
         player.giveShipLocation(new Battleship());
-        player.drawBoard();
+        player.drawFullBoard();
         player.giveShipLocation(new Submarine());
-        player.drawBoard();
+        player.drawFullBoard();
         player.giveShipLocation(new Cruiser());
-        player.drawBoard();
+        player.drawFullBoard();
         player.giveShipLocation(new Destroyer());
-        player.drawBoard();
+        player.drawFullBoard();
         player.startGame();
         player.fire();
+        player.drawFullBoard();
 
     }
 }

@@ -38,24 +38,28 @@ public class Player {
         );
     }
 
-    public void drawBoard() {
-        System.out.println(board.getBoardForDisplay());
+    public void drawFullBoard() {
+        System.out.println(board.getBoardForDisplay(false));
+    }
+
+    public void drawFoggedBoard() {
+        System.out.println(board.getBoardForDisplay(true));
     }
 
     public void startGame() {
         System.out.println(MSG_GAME_STARTS + "\n");
-        System.out.println(board.getBoardForDisplay());
+        drawFoggedBoard();
     }
 
 
     public void fire() {
         coordinatesPromptAndCheck();
-        drawBoard();
+        drawFoggedBoard();
         String result = board.lastShotResult() ? MSG_YOU_HIT : MSG_YOU_MISS;
         System.out.println(result + "\n");
     }
 
-    public void coordinatesPromptAndCheck(){
+    public void coordinatesPromptAndCheck() {
         System.out.println(MSG_TAKE_A_SHOT);
         Scanner scanner = new Scanner(System.in);
         while (true) {

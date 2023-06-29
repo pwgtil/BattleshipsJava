@@ -60,7 +60,7 @@ public class Board {
         areaOfInfluence = new HashSet<>();
     }
 
-    public String getBoardForDisplay() {
+    public String getBoardForDisplay(boolean fog) {
 
         char[][] display = new char[Board.boardSize][Board.boardSize];
         Arrays.stream(display).forEach(row -> Arrays.fill(row, ICON_FOG));
@@ -95,7 +95,11 @@ public class Board {
         for (int row = 0; row < Board.boardSize; row++) {
             output.append(rowInt2Str.get(row));
             for (int col = 0; col < Board.boardSize; col++) {
-                output.append(" ").append(display[row][col]);
+                if (fog && display[row][col] == ICON_SHIP){
+                    output.append(" ").append(ICON_FOG);
+                } else {
+                    output.append(" ").append(display[row][col]);
+                }
             }
             output.append("\n");
         }
