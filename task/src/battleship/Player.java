@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Player {
     static final String MSG_ENTER_COORDINATES = "Enter the coordinates of the %s (%d cells):";
+    static final String MSG_GAME_STARTS = "The game starts!";
     private final Board board;
 
     Player() {
@@ -32,14 +33,18 @@ public class Player {
         }
     }
 
-    public void drawBoard(){
+    public void drawBoard() {
+        System.out.println(board.getBoardForDisplay());
+    }
+
+    public void startGame() {
+        System.out.println(MSG_GAME_STARTS + "\n");
         System.out.println(board.getBoardForDisplay());
     }
 
 
-
     public Shelling shoot() {
-        // TODO: 2023-06-29 complete method. Next stage
+        // TODO: 2023-06-29 complete method
         return new Shelling();
     }
 
