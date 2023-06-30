@@ -7,10 +7,13 @@ public class Player {
     static final String MSG_GAME_STARTS = "The game starts!";
     static final String MSG_TAKE_A_SHOT = "Take a shot!";
 
-    private final Board board;
 
-    Player() {
-        board = new Board();
+    private final Board board;
+    public final String nickname;
+
+    Player(String name) {
+        this.board = new Board();
+        this.nickname = name;
     }
 
     public void giveShipLocation(Ship ship) {
