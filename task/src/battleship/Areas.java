@@ -13,7 +13,7 @@ abstract class Area {
     public void setLocation(Position[] positions) {}
 }
 
-abstract class Ship extends Area {
+class Ship extends Area {
 
     final static String MSG_ERR_WRONG_LOCATION = "Error! Wrong ship location! Try again:";
     final static String MSG_ERR_WRONG_LENGTH = "Error! Wrong length of the %s! Try again:";
@@ -24,9 +24,9 @@ abstract class Ship extends Area {
     HashSet<Position> areaOfInfluence;
 
 
-    Ship(int noOfCells, String name) {
-        this.hitPoints = this.noOfCells = noOfCells;
-        this.name = name;
+    Ship(ShipType shipType) {
+        this.hitPoints = this.noOfCells = shipType.noOfCells;
+        this.name = shipType.name;
         this.areaOfInfluence = new HashSet<>();
     }
 
@@ -123,35 +123,18 @@ class Shelling extends Area {
     }
 }
 
-class Carrier extends Ship {
-    Carrier() {
-        super(5, "Aircraft Carrier");
-    }
-}
+enum ShipType {
+    CARRIER(5, "Aircraft Carrier"),
+    BATTLESHIP(4, "Battleship"),
+    SUBMARINE(3, "Submarine"),
+    CRUISER(3, "Cruiser"),
+    DESTROYER(2, "Destroyer");
 
-class Battleship extends Ship {
-    public Battleship() {
-        super(4, "Battleship");
-    }
-}
+    final int noOfCells;
+    final String name;
 
-class Submarine extends Ship {
-
-    public Submarine() {
-        super(3, "Submarine");
-    }
-}
-
-class Cruiser extends Ship {
-
-    public Cruiser() {
-        super(3, "Cruiser");
-    }
-}
-
-class Destroyer extends Ship {
-
-    public Destroyer() {
-        super(2, "Destroyer");
+    ShipType(int noOfCells, String name) {
+        this.noOfCells = noOfCells;
+        this.name = name;
     }
 }

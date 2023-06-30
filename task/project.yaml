@@ -39,7 +39,7 @@ Area (Abstract):
   methods:
     - void setLocation(Position[] positions): definition
 
-Ship (Abstract) extends Area:
+Ship extends Area:
   params:
     - noOfCells: int
     - name: String
@@ -50,25 +50,6 @@ Ship (Abstract) extends Area:
     - ArrayList<Position> fillShipLocation(int rowMin, int rowMax, int colMin, int colMax)
     - void setLocation(Position[] positions): implementation
 
-Carrier extends Ship:
-  methods:
-    - Carrier()
-
-Battleship extends Ship:
-  methods:
-   - Battleship()
-
-Submarine extends Ship:
-  methods:
-    - Submarine()
-
-Cruiser extends Ship:
-  methods:
-    - Cruiser()
-
-Destroyer extends Ship:
-  methods:
-    - Destroyer()
 
 Shelling extends Area:
   methods:
