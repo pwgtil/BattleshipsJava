@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class Board {
 
@@ -11,6 +12,11 @@ public class Board {
     //--Setting up mappings-------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------------------------------
     final static String MSG_ERR_TOO_CLOSE = "Error! You placed it too close to another one. Try again:";
+    //final static String MSG_ERR_ALREADY_SHELLED = "Error! Field already shelled. Try again:";
+    static final String MSG_YOU_MISS = "You missed. Try again:";
+    static final String MSG_YOU_HIT = "You hit a ship! Try again:";
+    static final String MSG_YOU_HIT_AND_SANK_SHIP = "You sank a ship! Specify a new target:";
+    static final String MSG_YOU_WIN = "You sank the last ship. You won. Congratulations!";
     final static char ICON_FOG = '~';
     final static char ICON_SHIP = 'O';
     final static char ICON_HIT = 'X';
@@ -95,7 +101,7 @@ public class Board {
         for (int row = 0; row < Board.boardSize; row++) {
             output.append(rowInt2Str.get(row));
             for (int col = 0; col < Board.boardSize; col++) {
-                if (fog && display[row][col] == ICON_SHIP){
+                if (fog && display[row][col] == ICON_SHIP) {
                     output.append(" ").append(ICON_FOG);
                 } else {
                     output.append(" ").append(display[row][col]);
@@ -122,24 +128,60 @@ public class Board {
     }
 
     public void processShelling(Position coordinates) {
-        Shelling shelling = new Shelling();
-        shelling.setLocation(new Position[]{coordinates});
-        // TODO: 2023-06-29 add check if already shelled
-        areas.add(shelling);
+        var location = areas.stream()
+                .filter(a -> a instanceof Shelling)
+                .map(Shelling.class::cast)
+                .filter(s -> s.positions.get(0).equals(coordinates))
+                .collect(Collectors.toList());
+        boolean alreadyShelled = location.size() > 0;
+        if (!alreadyShelled) {
+            Shelling shelling = new Shelling();
+            shelling.setLocation(new Position[]{coordinates});
+            areas.add(shelling);
+        } else {
+            areas.remove(location.get(0));
+            location.get(0).noOfShootsAt++;
+            areas.add(location.get(0));
+//            throw new IllegalArgumentException(MSG_ERR_ALREADY_SHELLED);
+        }
     }
 
-    private boolean hitOrMiss(Area shelling) {
+    private Result checkHitAndProcess(Area shelling) {
         for (Area area : areas) {
             if (area instanceof Ship && area.positions.contains(shelling.positions.get(0))) {
-                return true;
+                if (((Shelling) shelling).noOfShootsAt > 1) {
+                    return Result.HIT;
+                }
+                if (((Ship) area).hitShipAndCheckIfDead()) {
+                    if (allShipsShelled()) {
+                        return Result.WIN;
+                    } else {
+                        return Result.HIT_AND_SUNK;
+                    }
+                } else {
+                    return Result.HIT;
+                }
             }
-
         }
-        return false;
+        return Result.MISS;
     }
 
 
-    public boolean lastShotResult() {
-        return hitOrMiss(areas.get(areas.size() - 1));
+    public String lastShotResult() {
+        return checkHitAndProcess(areas.get(areas.size() - 1)).msg;
     }
+
+    public boolean allShipsShelled() {
+        return areas.stream().filter(a -> a instanceof Ship).noneMatch(s -> ((Ship) s).alive);
+    }
+
+    enum Result {
+        MISS(MSG_YOU_MISS), HIT(MSG_YOU_HIT), HIT_AND_SUNK(MSG_YOU_HIT_AND_SANK_SHIP), WIN(MSG_YOU_WIN);
+        final String msg;
+
+        Result(String msg) {
+            this.msg = msg;
+        }
+    }
+
 }

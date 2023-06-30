@@ -12,11 +12,11 @@ public class ShipsTest extends TestCase {
 
     public void setUp() throws Exception {
         super.setUp();
-        carrier = new Carrier();
-        battleship = new Battleship();
-        submarine = new Submarine();
-        cruiser = new Cruiser();
-        destroyer = new Destroyer();
+        carrier = new Ship(ShipType.CARRIER);
+        battleship = new Ship(ShipType.BATTLESHIP);
+        submarine = new Ship(ShipType.SUBMARINE);
+        cruiser = new Ship(ShipType.CRUISER);
+        destroyer = new Ship(ShipType.DESTROYER);
 
     }
 

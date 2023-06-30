@@ -6,8 +6,6 @@ public class Player {
     static final String MSG_ENTER_COORDINATES = "Enter the coordinates of the %s (%d cells):";
     static final String MSG_GAME_STARTS = "The game starts!";
     static final String MSG_TAKE_A_SHOT = "Take a shot!";
-    static final String MSG_YOU_MISS = "You missed!";
-    static final String MSG_YOU_HIT = "You hit a ship!";
 
     private final Board board;
 
@@ -49,18 +47,18 @@ public class Player {
     public void startGame() {
         System.out.println(MSG_GAME_STARTS + "\n");
         drawFoggedBoard();
+        System.out.println(MSG_TAKE_A_SHOT + "\n");
     }
 
 
     public void fire() {
         coordinatesPromptAndCheck();
         drawFoggedBoard();
-        String result = board.lastShotResult() ? MSG_YOU_HIT : MSG_YOU_MISS;
-        System.out.println(result + "\n");
+        String result = board.lastShotResult();
+        System.out.println(result);
     }
 
     public void coordinatesPromptAndCheck() {
-        System.out.println(MSG_TAKE_A_SHOT);
         Scanner scanner = new Scanner(System.in);
         while (true) {
             try {
@@ -74,8 +72,8 @@ public class Player {
         }
     }
 
-    public void win() {
-        // TODO: 2023-06-29 complete method. Next stage
+    public boolean endGame() {
+        return board.allShipsShelled();
     }
 }
 

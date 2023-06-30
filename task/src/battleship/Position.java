@@ -8,9 +8,6 @@ public class Position {
     int row;
     int col;
 
-    String rowDisplay;
-    String colDisplay;
-
     Position(int row, int col) {
         this.row = row;
         this.col = col;
@@ -27,17 +24,6 @@ public class Position {
     @Override
     public int hashCode() {
         return Objects.hash(row, col);
-    }
-
-    public boolean setDisplayValues() {
-        try {
-            this.rowDisplay = Position.integer2StringLetter(this.row);
-            this.colDisplay = Position.integer2StringNum(this.col);
-            return true;
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
     }
 
     public boolean positionInBounds() {

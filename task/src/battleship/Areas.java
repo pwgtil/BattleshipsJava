@@ -21,6 +21,7 @@ class Ship extends Area {
     final public int noOfCells;
     final public String name;
     protected int hitPoints;
+    boolean alive = true;
     HashSet<Position> areaOfInfluence;
 
 
@@ -100,12 +101,22 @@ class Ship extends Area {
         }
         return shipLocation;
     }
+    public boolean hitShipAndCheckIfDead(){
+        assert (hitPoints > 0) : "Internal error: Ship is already dead but still shelled"; // to be removed
+        hitPoints = hitPoints - 1;
+        if (hitPoints == 0) {
+            alive = false;
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 class Shelling extends Area {
 
     final static String MSG_ERR_WRONG_COORDINATES = "Error! You entered the wrong coordinates! Try again:";
-
+    public int noOfShootsAt = 1;
     @Override
     public void setLocation(Position[] coordinates) {
 

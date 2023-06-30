@@ -9,7 +9,7 @@ Player:
     - void startGame()
     - void fire()
     - Position getPositionFromText(String text)
-    - win(): TODO
+    - boolean endGame()
 
 Position:
   params:
@@ -31,6 +31,9 @@ Board:
     - void processShipPlacement(Ship ship, Position beginning, Position end)
     - void checkAreaOfInfluence(Ship ship)
     - void processShelling(Position coordinates)
+    - boolean checkHitAndProcess(Area shelling)
+    - boolean allShipsShelled()
+    - boolean lastShotResult()
 
 
 Area (Abstract):
@@ -49,6 +52,7 @@ Ship extends Area:
     - HashSet<Position> fillAreaOfInfluence(ArrayList<Position> positions)
     - ArrayList<Position> fillShipLocation(int rowMin, int rowMax, int colMin, int colMax)
     - void setLocation(Position[] positions): implementation
+    - void getShelled()
 
 
 Shelling extends Area:
