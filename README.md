@@ -12,6 +12,8 @@ Board is filled with Ships or Shellings that inherit from Area.
 Location is represented by Position class. 
 
 Details are visible below:
+<img src=".\task\diagram_uml.png" title="UML"/>
+
 
 ```plantuml
 @startuml
