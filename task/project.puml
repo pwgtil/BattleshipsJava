@@ -1,20 +1,3 @@
-# Battleships!
-Hyperskill project for Java
-
-Project definition can be found  [here](https://hyperskill.org/projects/125).
-
-### UML Structure
-Game class is to start playing Battleships.
-It generates two Players. 
-
-Each has its own Board. 
-Board is filled with Ships or Shellings that inherit from Area. 
-Location is represented by Position class. 
-
-Details are visible below:
-
-```plantuml
-@startuml
 @startuml
 class battleship.Board {
 ~ {static} String MSG_ERR_TOO_CLOSE
@@ -131,18 +114,3 @@ class battleship.Main {
 battleship.Area <|-- battleship.Ship
 battleship.Area <|-- battleship.Shelling
 @enduml
-@enduml
-```
-
-
-[//]: # (> This sample is a part of the [codeSnippets]&#40;../../README.md&#41; Gradle project.)
-[//]: # ()
-[//]: # ()
-[//]: # ()
-[//]: # (```bash)
-
-[//]: # ()
-[//]: # (./gradlew :tutorial-server-get-started:run)
-
-[//]: # ()
-[//]: # (```)

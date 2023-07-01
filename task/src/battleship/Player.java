@@ -4,8 +4,7 @@ import java.util.Scanner;
 
 public class Player {
     static final String MSG_ENTER_COORDINATES = "Enter the coordinates of the %s (%d cells):";
-    static final String MSG_GAME_STARTS = "The game starts!";
-    static final String MSG_TAKE_A_SHOT = "Take a shot!";
+    static final String MSG_DASH_BAR = "---------------------";
 
 
     private final Board board;
@@ -16,7 +15,7 @@ public class Player {
         this.nickname = name;
     }
 
-    public void giveShipLocation(Ship ship) {
+    private void setShipLocation(Ship ship) {
         System.out.printf(MSG_ENTER_COORDINATES + "%n", ship.name, ship.noOfCells);
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -39,7 +38,12 @@ public class Player {
         );
     }
 
-    public void drawFullBoard() {
+    public void setShipLocationAndDrawBoard(Ship ship) {
+        setShipLocation(ship);
+        drawFullBoard();
+    }
+
+    private void drawFullBoard() {
         System.out.println(board.getBoardForDisplay(false));
     }
 
@@ -47,36 +51,35 @@ public class Player {
         System.out.println(board.getBoardForDisplay(true));
     }
 
-    public void startGame() {
-        System.out.println(MSG_GAME_STARTS + "\n");
-        drawFoggedBoard();
-        System.out.println(MSG_TAKE_A_SHOT + "\n");
-    }
-
 
     public void fire() {
         coordinatesPromptAndCheck();
-        drawFoggedBoard();
         String result = board.lastShotResult();
         System.out.println(result);
     }
 
+    // Uncomment the below code to have a chance to correct fire when incorrect location was set
     public void coordinatesPromptAndCheck() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
+//        while (true) {
             try {
-                String coordinates = scanner.nextLine().trim();
+                String coordinates = Game.sc.nextLine().trim();
                 Position position = getPositionFromText(coordinates);
                 board.processShelling(position);
-                break;
+//                break;
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                //System.out.println(e.getMessage());
             }
-        }
+//        }
     }
 
-    public boolean endGame() {
-        return board.allShipsShelled();
+    public boolean gameContinues() {
+        return !board.allShipsShelled();
+    }
+
+    public void printBothBoards(Player enemy) {
+        enemy.drawFoggedBoard();
+        System.out.println(MSG_DASH_BAR);
+        drawFullBoard();
     }
 }
 

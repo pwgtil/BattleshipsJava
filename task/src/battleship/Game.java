@@ -22,32 +22,39 @@ public class Game {
     public void initializationOfBoards() {
         // Player 1 set up the board
         playerBoardSetup(player1);
+        passMove();
         // Player 2 set up the board
         playerBoardSetup(player2);
     }
 
     private void playerBoardSetup(Player player) {
         System.out.printf(MSG_PLACE_YOUR_SHIPS + "\n", player.nickname);
-        player.drawFullBoard();
-        player.giveShipLocation(new Ship(ShipType.CARRIER));
-        player.drawFullBoard();
-//        player.giveShipLocation(new Ship(ShipType.BATTLESHIP));
-//        player.drawFullBoard();
-//        player.giveShipLocation(new Ship(ShipType.SUBMARINE));
-//        player.drawFullBoard();
-//        player.giveShipLocation(new Ship(ShipType.CRUISER));
-//        player.drawFullBoard();
-//        player.giveShipLocation(new Ship(ShipType.DESTROYER));
-//        player.drawFullBoard();
-        passMove();
+        player.drawFoggedBoard();
+        player.setShipLocationAndDrawBoard(new Ship(ShipType.CARRIER));
+        player.setShipLocationAndDrawBoard(new Ship(ShipType.BATTLESHIP));
+        player.setShipLocationAndDrawBoard(new Ship(ShipType.SUBMARINE));
+        player.setShipLocationAndDrawBoard(new Ship(ShipType.CRUISER));
+        player.setShipLocationAndDrawBoard(new Ship(ShipType.DESTROYER));
     }
 
     public void startGame() {
         // Game goes until one player wins
+        while (player1.gameContinues() && player2.gameContinues()){
+            passMove();
+            currentPlayer.printBothBoards(getEnemy());
+            System.out.printf(MSG_ITS_YOUR_TURN + "\n\n", currentPlayer.nickname);
+            getEnemy().fire();
+            switchPlayer();
+        }
+
     }
 
-    private void switchPlayer(Player player) {
-        this.currentPlayer = player == player1 ? player2 : player1;
+    private void switchPlayer() {
+        this.currentPlayer = getEnemy();
+    }
+
+    private Player getEnemy() {
+        return currentPlayer == player1 ? player2 : player1;
     }
 
     public void passMove() {

@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 abstract class Area {
+    protected ArrayList<Position> positions = new ArrayList<>();
+
     public ArrayList<Position> getPositions() {
         return positions;
     }
 
-    protected ArrayList<Position> positions = new ArrayList<>();
-
-    public void setLocation(Position[] positions) {}
+    public void setLocation(Position[] positions) {
+    }
 }
 
 class Ship extends Area {
@@ -21,9 +22,12 @@ class Ship extends Area {
     final public int noOfCells;
     final public String name;
     protected int hitPoints;
-    boolean alive = true;
+    private boolean alive = true;
     HashSet<Position> areaOfInfluence;
 
+    public boolean isAlive() {
+        return alive;
+    }
 
     Ship(ShipType shipType) {
         this.hitPoints = this.noOfCells = shipType.noOfCells;
@@ -35,7 +39,7 @@ class Ship extends Area {
     public void setLocation(Position[] positions) {
 
         int colMin, colMax, rowMin, rowMax;
-        if (positions.length != 2){
+        if (positions.length != 2) {
             throw new IllegalArgumentException(MSG_ERR_WRONG_LOCATION);
         }
         Position beginning = positions[0];
@@ -101,8 +105,8 @@ class Ship extends Area {
         }
         return shipLocation;
     }
-    public boolean hitShipAndCheckIfDead(){
-        assert (hitPoints > 0) : "Internal error: Ship is already dead but still shelled"; // to be removed
+
+    public boolean hitShipAndCheckIfDead() {
         hitPoints = hitPoints - 1;
         if (hitPoints == 0) {
             alive = false;
@@ -117,10 +121,11 @@ class Shelling extends Area {
 
     final static String MSG_ERR_WRONG_COORDINATES = "Error! You entered the wrong coordinates! Try again:";
     public int noOfShootsAt = 1;
+
     @Override
     public void setLocation(Position[] coordinates) {
 
-        if (coordinates.length != 1){
+        if (coordinates.length != 1) {
             throw new IllegalArgumentException(MSG_ERR_WRONG_COORDINATES);
         }
 

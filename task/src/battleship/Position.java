@@ -27,19 +27,18 @@ public class Position {
     }
 
     public boolean positionInBounds() {
-        ValueRange range = ValueRange.of(0, Board.boardSize - 1);
+        ValueRange range = ValueRange.of(0, Board.BOARD_SIZE - 1);
         return range.isValidIntValue(this.col) && range.isValidIntValue(this.row);
     }
 
     //--STATICS---------------------------------------------------------------------------------------------------------
     //--Core parsers between internal state and display state of positions (A -> 1 etc.)--------------------------------
     //------------------------------------------------------------------------------------------------------------------
-
     static public int stringNum2Int(String num) throws IllegalArgumentException {
         if (Board.colStr2Int.containsKey(num)){
             return Board.colStr2Int.get(num);
         } else {
-            throw new IllegalArgumentException(String.format("Error! Expected a number between 1 and %d. Try again:", Board.boardSize));
+            throw new IllegalArgumentException(String.format("Error! Expected a number between 1 and %d. Try again:", Board.BOARD_SIZE));
         }
     }
 
@@ -47,7 +46,7 @@ public class Position {
         if (Board.rowStr2Int.containsKey(letter)){
             return Board.rowStr2Int.get(letter);
         } else {
-            throw new IllegalArgumentException(String.format("Error! Expected a single capital letter between A and %s. Try again:", Board.rowInt2Str.get(Board.boardSize - 1)));
+            throw new IllegalArgumentException(String.format("Error! Expected a single capital letter between A and %s. Try again:", Board.rowInt2Str.get(Board.BOARD_SIZE - 1)));
         }
     }
 
@@ -55,7 +54,7 @@ public class Position {
         if (Board.colInt2Str.containsKey(number)){
             return Board.colInt2Str.get(number);
         } else {
-            throw new IllegalArgumentException(String.format("Error! Expected a number between 0 and %d. Try again:", Board.boardSize - 1));
+            throw new IllegalArgumentException(String.format("Error! Expected a number between 0 and %d. Try again:", Board.BOARD_SIZE - 1));
         }
     }
 
@@ -63,7 +62,7 @@ public class Position {
         if (Board.rowInt2Str.containsKey(number)){
             return Board.rowInt2Str.get(number);
         } else {
-            throw new IllegalArgumentException(String.format("Error! Expected a number between 0 and %d. Try again:", Board.boardSize - 1));
+            throw new IllegalArgumentException(String.format("Error! Expected a number between 0 and %d. Try again:", Board.BOARD_SIZE - 1));
         }
     }
 }

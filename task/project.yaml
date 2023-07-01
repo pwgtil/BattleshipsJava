@@ -1,3 +1,5 @@
+Into: "REPLACED WITH project.puml"
+
 Player:
   params:
     - board: Board
