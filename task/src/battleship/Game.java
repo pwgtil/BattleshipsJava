@@ -9,9 +9,9 @@ public class Game {
     static final String MSG_PRESS_ENTER = "Press Enter and pass the move to another player\n...";
     static final Scanner sc = new Scanner(System.in);
 
-    Player player1;
-    Player player2;
-    Player currentPlayer;
+    PlayerMoves player1;
+    PlayerMoves player2;
+    PlayerMoves currentPlayer;
 
     Game() {
         player1 = new Player("Player 1");
@@ -27,9 +27,9 @@ public class Game {
         playerBoardSetup(player2);
     }
 
-    private void playerBoardSetup(Player player) {
-        System.out.printf(MSG_PLACE_YOUR_SHIPS + "\n", player.nickname);
-        player.drawFoggedBoard();
+    private void playerBoardSetup(PlayerMoves player) {
+        System.out.printf(MSG_PLACE_YOUR_SHIPS + "\n", player.getNickname());
+        player.printFoggedBoard();
         player.setShipLocationAndDrawBoard(new Ship(ShipType.CARRIER));
         player.setShipLocationAndDrawBoard(new Ship(ShipType.BATTLESHIP));
         player.setShipLocationAndDrawBoard(new Ship(ShipType.SUBMARINE));
@@ -39,10 +39,10 @@ public class Game {
 
     public void startGame() {
         // Game goes until one player wins
-        while (player1.gameContinues() && player2.gameContinues()){
+        while (player1.checkIfGameContinues() && player2.checkIfGameContinues()){
             passMove();
             currentPlayer.printBothBoards(getEnemy());
-            System.out.printf(MSG_ITS_YOUR_TURN + "\n\n", currentPlayer.nickname);
+            System.out.printf(MSG_ITS_YOUR_TURN + "\n\n", currentPlayer.getNickname());
             getEnemy().fire();
             switchPlayer();
         }
@@ -53,7 +53,7 @@ public class Game {
         this.currentPlayer = getEnemy();
     }
 
-    private Player getEnemy() {
+    private PlayerMoves getEnemy() {
         return currentPlayer == player1 ? player2 : player1;
     }
 

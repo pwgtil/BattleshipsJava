@@ -1,4 +1,16 @@
 @startuml
+interface battleship.BoardUtils {
+~ int BOARD_SIZE
+~ HashMap<Integer,String> rowInt2Str
+~ HashMap<Integer,String> colInt2Str
+~ HashMap<String,Integer> rowStr2Int
+~ HashMap<String,Integer> colStr2Int
+~ String getBoardForDisplay(boolean)
+~ void processShipPlacement(Ship,Position,Position)
+~ void processShelling(Position)
+~ String lastShotResult()
+~ boolean allShipsShelled()
+}
 class battleship.Board {
 ~ {static} String MSG_ERR_TOO_CLOSE
 ~ {static} String MSG_YOU_MISS
@@ -9,13 +21,8 @@ class battleship.Board {
 ~ {static} char ICON_SHIP
 ~ {static} char ICON_HIT
 ~ {static} char ICON_MISS
-~ {static} int boardSize
-+ {static} HashMap<Integer,String> rowInt2Str
-+ {static} HashMap<Integer,String> colInt2Str
-+ {static} HashMap<String,Integer> rowStr2Int
-+ {static} HashMap<String,Integer> colStr2Int
-~ ArrayList<Area> areas
-~ HashSet<Position> areaOfInfluence
+- ArrayList<Area> areas
+- HashSet<Position> areaOfInfluence
 + String getBoardForDisplay(boolean)
 + void processShipPlacement(Ship,Position,Position)
 - void checkAreaOfInfluence(Ship)
@@ -75,35 +82,45 @@ enum battleship.ShipType {
 ~ int noOfCells
 ~ String name
 }
+interface battleship.PlayerInfo {
+~ String getNickname()
+~ void printFoggedBoard()
+~ void printBothBoards(PlayerMoves)
+}
+interface battleship.PlayerMoves {
+~ void setShipLocationAndDrawBoard(Ship)
+~ void fire()
+~ boolean checkIfGameContinues()
+}
 class battleship.Player {
 ~ {static} String MSG_ENTER_COORDINATES
-~ {static} String MSG_TAKE_A_SHOT
 ~ {static} String MSG_DASH_BAR
 - Board board
-+ String nickname
+- String nickname
++ String getNickname()
 - void setShipLocation(Ship)
 - Position getPositionFromText(String)
 + void setShipLocationAndDrawBoard(Ship)
-- void drawFullBoard()
-+ void drawFoggedBoard()
++ void printFoggedBoard()
 + void fire()
-+ void coordinatesPromptAndCheck()
-+ boolean gameContinues()
-+ void printBothBoards(Player)
+- void drawFullBoard()
+- void coordinatesPromptAndCheck()
++ boolean checkIfGameContinues()
++ void printBothBoards(PlayerMoves)
 }
 class battleship.Game {
 ~ {static} String MSG_PLACE_YOUR_SHIPS
 ~ {static} String MSG_ITS_YOUR_TURN
 ~ {static} String MSG_PRESS_ENTER
 ~ {static} Scanner sc
-~ Player player1
-~ Player player2
-~ Player currentPlayer
+~ PlayerMoves player1
+~ PlayerMoves player2
+~ PlayerMoves currentPlayer
 + void initializationOfBoards()
-- void playerBoardSetup(Player)
+- void playerBoardSetup(PlayerMoves)
 + void startGame()
-- void switchPlayer(Player)
-- Player getEnemy()
+- void switchPlayer()
+- PlayerMoves getEnemy()
 + void passMove()
 }
 class battleship.Main {
@@ -111,6 +128,9 @@ class battleship.Main {
 }
 
 
+battleship.BoardUtils <|.. battleship.Board
 battleship.Area <|-- battleship.Ship
 battleship.Area <|-- battleship.Shelling
+battleship.PlayerInfo <|-- battleship.PlayerMoves
+battleship.PlayerMoves <|.. battleship.Player
 @enduml

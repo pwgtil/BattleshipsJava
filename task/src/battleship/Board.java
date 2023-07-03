@@ -2,7 +2,47 @@ package battleship;
 
 import java.util.*;
 
-public class Board {
+interface BoardUtils {
+    int BOARD_SIZE = 10;
+
+    HashMap<Integer, String> rowInt2Str = new HashMap<>() {
+        {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                put(i, String.valueOf((char) (i + 'A')));
+            }
+        }
+    };
+    HashMap<Integer, String> colInt2Str = new HashMap<>() {
+        {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                put(i, String.valueOf(i + 1));
+            }
+        }
+    };
+
+    HashMap<String, Integer> rowStr2Int = new HashMap<>() {
+        {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                put(String.valueOf((char) (i + 'A')), i);
+            }
+        }
+    };
+    HashMap<String, Integer> colStr2Int = new HashMap<>() {
+        {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                put(String.valueOf(i + 1), i);
+            }
+        }
+    };
+
+    String getBoardForDisplay(boolean fog);
+    void processShipPlacement(Ship ship, Position beginning, Position end);
+    void processShelling(Position coordinates);
+    String lastShotResult();
+    boolean allShipsShelled();
+}
+
+public class Board implements BoardUtils {
 
     //------------------------------------------------------------------------------------------------------------------
     //--STATICS---------------------------------------------------------------------------------------------------------
@@ -17,43 +57,11 @@ public class Board {
     final static char ICON_HIT = 'X';
     final static char ICON_MISS = 'M';
 
-    static final int BOARD_SIZE = 10;
-
-    public static final HashMap<Integer, String> rowInt2Str = new HashMap<>() {
-        {
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                put(i, String.valueOf((char) (i + 'A')));
-            }
-        }
-    };
-    public static final HashMap<Integer, String> colInt2Str = new HashMap<>() {
-        {
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                put(i, String.valueOf(i + 1));
-            }
-        }
-    };
-
-    public static final HashMap<String, Integer> rowStr2Int = new HashMap<>() {
-        {
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                put(String.valueOf((char) (i + 'A')), i);
-            }
-        }
-    };
-    public static final HashMap<String, Integer> colStr2Int = new HashMap<>() {
-        {
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                put(String.valueOf(i + 1), i);
-            }
-        }
-    };
-
     //-----------------------------------------------------------------------------------------------------------------
     //--Main stuff -------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------------------------------
-    ArrayList<Area> areas;
-    HashSet<Position> areaOfInfluence;
+    private final ArrayList<Area> areas;
+    private final HashSet<Position> areaOfInfluence;
 
 
     Board() {
@@ -61,6 +69,7 @@ public class Board {
         areaOfInfluence = new HashSet<>();
     }
 
+    @Override
     public String getBoardForDisplay(boolean fog) {
 
         char[][] display = new char[Board.BOARD_SIZE][Board.BOARD_SIZE];
@@ -107,6 +116,7 @@ public class Board {
         return output.toString();
     }
 
+    @Override
     public void processShipPlacement(Ship ship, Position beginning, Position end) {
         ship.setLocation(new Position[]{beginning, end});
         checkAreaOfInfluence(ship);
@@ -122,6 +132,7 @@ public class Board {
         }
     }
 
+    @Override
     public void processShelling(Position coordinates) {
         List<Shelling> location = areas.stream()
                 .filter(a -> a instanceof Shelling)
@@ -160,11 +171,12 @@ public class Board {
         return Result.MISS;
     }
 
-
+    @Override
     public String lastShotResult() {
         return checkHitAndProcess(areas.get(areas.size() - 1)).msg;
     }
 
+    @Override
     public boolean allShipsShelled() {
         return areas.stream().filter(a -> a instanceof Ship).noneMatch(s -> ((Ship) s).isAlive());
     }

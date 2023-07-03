@@ -2,13 +2,30 @@ package battleship;
 
 import java.util.Scanner;
 
-public class Player {
+interface PlayerInfo {
+    String getNickname();
+    void printFoggedBoard();
+    void printBothBoards(PlayerMoves enemy);
+}
+
+interface PlayerMoves extends PlayerInfo {
+    void setShipLocationAndDrawBoard(Ship ship);
+    void fire();
+    boolean checkIfGameContinues();
+}
+
+public class Player implements PlayerMoves {
     static final String MSG_ENTER_COORDINATES = "Enter the coordinates of the %s (%d cells):";
     static final String MSG_DASH_BAR = "---------------------";
 
 
-    private final Board board;
-    public final String nickname;
+    private final BoardUtils board;
+    private final String nickname;
+
+    @Override
+    public String getNickname() {
+        return nickname;
+    }
 
     Player(String name) {
         this.board = new Board();
@@ -38,46 +55,51 @@ public class Player {
         );
     }
 
+    @Override
     public void setShipLocationAndDrawBoard(Ship ship) {
         setShipLocation(ship);
         drawFullBoard();
     }
 
-    private void drawFullBoard() {
-        System.out.println(board.getBoardForDisplay(false));
-    }
-
-    public void drawFoggedBoard() {
+    @Override
+    public void printFoggedBoard() {
         System.out.println(board.getBoardForDisplay(true));
     }
 
-
+    @Override
     public void fire() {
         coordinatesPromptAndCheck();
         String result = board.lastShotResult();
         System.out.println(result);
     }
 
+    private void drawFullBoard() {
+        System.out.println(board.getBoardForDisplay(false));
+    }
+
+
     // Uncomment the below code to have a chance to correct fire when incorrect location was set
-    public void coordinatesPromptAndCheck() {
+    private void coordinatesPromptAndCheck() {
 //        while (true) {
-            try {
-                String coordinates = Game.sc.nextLine().trim();
-                Position position = getPositionFromText(coordinates);
-                board.processShelling(position);
+        try {
+            String coordinates = Game.sc.nextLine().trim();
+            Position position = getPositionFromText(coordinates);
+            board.processShelling(position);
 //                break;
-            } catch (IllegalArgumentException e) {
-                //System.out.println(e.getMessage());
-            }
+        } catch (IllegalArgumentException e) {
+            //System.out.println(e.getMessage());
+        }
 //        }
     }
 
-    public boolean gameContinues() {
+    @Override
+    public boolean checkIfGameContinues() {
         return !board.allShipsShelled();
     }
 
-    public void printBothBoards(Player enemy) {
-        enemy.drawFoggedBoard();
+    @Override
+    public void printBothBoards(PlayerMoves enemy) {
+        enemy.printFoggedBoard();
         System.out.println(MSG_DASH_BAR);
         drawFullBoard();
     }
